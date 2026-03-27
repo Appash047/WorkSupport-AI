@@ -43,11 +43,13 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
 
+          set +e
+
           echo "Stopping old application..."
-          pkill -f 'java -jar' || echo "No running app"
+          pkill -f 'java -jar'
 
           echo "Moving new JAR to root..."
-          mv /home/ubuntu/WorkSupport-AI/target/*.jar /home/ubuntu/WorkSupport-AI/ 2>/dev/null || true
+          mv /home/ubuntu/WorkSupport-AI/target/*.jar /home/ubuntu/WorkSupport-AI/ 2>/dev/null
 
           echo "Cleaning old JAR files (keeping latest)..."
           cd /home/ubuntu/WorkSupport-AI/

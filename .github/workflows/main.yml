@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -41,16 +44,16 @@ jobs:
         script: |
 
           echo "Stopping old application..."
-          pkill -f 'java -jar' || true
+          pkill -f 'java -jar' || echo "No running app"
 
           echo "Moving new JAR to root..."
           mv /home/ubuntu/WorkSupport-AI/target/*.jar /home/ubuntu/WorkSupport-AI/ 2>/dev/null || true
 
           echo "Cleaning old JAR files (keeping latest)..."
           cd /home/ubuntu/WorkSupport-AI/
-          ls -t *.jar | tail -n +2 | xargs -r rm --
+          ls -t *.jar 2>/dev/null | tail -n +2 | xargs -r rm --
 
           echo "Starting new application..."
           nohup java -jar /home/ubuntu/WorkSupport-AI/*.jar > /home/ubuntu/WorkSupport-AI/app.log 2>&1 &
 
-          echo "Deployment completed!"
+          echo "Deployment completed successfully!"

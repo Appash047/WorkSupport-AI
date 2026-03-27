@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+    <title>Header</title>
+
+</head>
+<body>
+<header class="header" th:fragment="header">
+    <div class="logo">
+        <a class="dropdown-link" th:href="${#authorization.expression('isAuthenticated()') ? '/home' : '/login'}">
+            <img th:src="@{/images/iEngage.png}" alt="Brand Logo">
+        </a>
+        <h1 class="center">iEngage</h1>
+    </div>
+
+    <div class="explore" sec:authorize="isAuthenticated()">
+        <a class="dropdown-link-explore" th:href="@{/explore-page}">
+            <span class="tooltip-text">Explore</span>
+            <i class="fa fa-search"></i>
+        </a>
+    </div>
+
+
+    <div class="notification-icon" sec:authorize="isAuthenticated()"
+         th:if="${notifications!=null and #lists.size(notifications) > 0}">
+        <div class="notification-info">
+            <div class="notifications">
+                <h1 class="notification-name"><i class="fas fa-bell ">
+                    <sup><span class="notification-count" th:text="${#lists.size(notifications)}"></span>
+                    </sup></i></h1>
+            </div>
+        </div>
+        <div class="notifications-content">
+            <div class="notifications-dropdown" th:each="notification:${notifications}">
+
+                <form id="notification-form-${notification.employeeId}"
+                      method="post" th:action="@{/update-notification}">
+                    <a class="notification-lnk" th:href="${notification.link}">
+                        <button class="notification-btn">
+                            <img alt="Employee Image" class="notification-img"
+                                 th:src="@{'/employee/employee-pic/' + ${notification.employeeId}}"/>
+                            <img alt="Default Image" class="notification-img" th:if="${notification.employeeId == null}"
+                                 th:src="@{/images/default.jpg}"/>
+                            <b> <span class="notification-msg" th:text="${notification.message}">John Doe reacted to your post</span>
+                            </b>
+                        </button>
+                    </a>
+                    <input name="id" th:value="${notification.id}" type="hidden">
+                    <input name="link" th:value="${notification.link}" type="hidden">
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-icon" sec:authorize="isAuthenticated()">
+        <div class="user-info">
+            <div class="logo">
+                <h5 class="user-name" sec:authentication="principal.fullName">Hello</h5>
+                <img alt="Employee Image"
+                     th:if="${#authentication.principal.profilePicture != null && #authentication.principal.profilePicture.length > 0}"
+                     th:src="@{'/employee/employee-pic/' + ${#authentication.principal.employeeId}}"/>
+                <img alt="Default Image"
+                     th:src="@{/images/user.png}"
+                     th:unless="${#authentication.principal.profilePicture != null && #authentication.principal.profilePicture.length > 0}"/>
+            </div>
+        </div>
+        <div class="dropdown-content">
+            <a class="dropdown-link" th:href="@{/employee/view-profile}">View Profile</a>
+            <a class="dropdown-link" th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+</header>
+</body>
+</html>

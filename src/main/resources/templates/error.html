@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+</head>
+<body style="text-align:center; margin-top:100px;">
+    <h2>Something went wrong</h2>
+    <p th:text="${error != null ? error : 'Please try again later.'}">Please try again later.</p>
+    <div style="margin-top:16px;">
+        <a href="/login">Back to login</a>
+    </div>
+</body>
+</html>

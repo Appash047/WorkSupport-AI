@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login - WorkSupport AI</title>
+</head>
+<body style="text-align:center; margin-top:100px;">
+
+<h2>Login</h2>
+
+<form th:action="@{/doLogin}" method="post">
+  <div>
+    <input type="text" name="username" placeholder="Username"/>
+  </div>
+  <br>
+  <div>
+    <input type="password" name="password" placeholder="Password"/>
+  </div>
+  <br>
+  <button type="submit">Login</button>
+</form>
+
+<!-- Error message -->
+<div th:if="${param.error}">
+  <p style="color:red;">Invalid username or password</p>
+</div>
+
+<!-- Logout message -->
+<div th:if="${param.logout}">
+  <p style="color:green;">Logged out successfully</p>
+</div>
+
+</body>
+</html>
